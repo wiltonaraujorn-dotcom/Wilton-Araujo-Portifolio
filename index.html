@@ -158,9 +158,11 @@
 
   /* ---------- HERO ---------- */
   .hero{
+    min-height: 82vh;
     padding: 96px 0 64px;
     text-align:center;
     display:flex; flex-direction:column; align-items:center;
+    justify-content:center;
   }
   .hero-logo{
     width: 62px; height:62px;
@@ -221,7 +223,7 @@
   .pill-link svg{ flex-shrink:0; }
 
   /* ---------- SECTION HEADS ---------- */
-  .section{ padding: 140px 0; }
+  .section{ padding: 90px 0; }
   .section-head{ margin-bottom: 40px; text-align:center; }
   .kicker{
     font-size:.78rem; text-transform: uppercase; letter-spacing:.14em;
@@ -336,8 +338,8 @@
 
   /* ---------- CONTACT / FOOTER ---------- */
   footer{
-    padding: 88px 0 44px;
-    margin-top: 40px;
+    padding: 60px 0 44px;
+    margin-top: 10px;
     border-top: 1px solid var(--line-soft);
     text-align:center;
   }
@@ -360,7 +362,7 @@
   @media (max-width: 760px){
     .about-card{ grid-template-columns: 1fr; }
     .about-photo{ max-width: 220px; margin: 0 auto; }
-    .section{ padding: 80px 0; }
+    .section{ padding: 56px 0; }
     .hero h1{ font-size: 2.25rem; }
     .role{ font-size: 1rem; }
     .section h2{ font-size: 1.4rem; }
@@ -370,7 +372,7 @@
     .kicker{ font-size: .75rem; }
   }
   @media (max-width: 560px){
-    .hero{ padding: 56px 0 36px; }
+    .hero{ min-height: 78vh; padding: 56px 0 36px; }
     .project-body{ padding: 20px 18px 24px; }
     .hero h1{ font-size: 1.9rem; }
     .role{ font-size: .92rem; }
