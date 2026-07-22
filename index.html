@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wilton Araujo — UX/UI Designer</title>
 <meta name="description" content="Portfólio de Wilton Araujo, UX/UI Designer. Wireframes, protótipos e interfaces focadas em usabilidade.">
-<link rel="icon" href="assets/logo.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
@@ -158,11 +160,47 @@
 
   /* ---------- HERO ---------- */
   .hero{
+    position: relative;
     min-height: 82vh;
     padding: 96px 0 64px;
     text-align:center;
     display:flex; flex-direction:column; align-items:center;
     justify-content:center;
+  }
+
+  /* ---------- SCROLL INDICATOR ---------- */
+  .scroll-indicator{
+    position: absolute;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%);
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.16);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    opacity: 0;
+    transition: opacity .5s ease, transform .5s ease;
+    z-index: 5;
+    animation: indicatorFadeIn .6s ease 2.5s forwards, scrollBounce 2s ease-in-out 3.1s infinite;
+  }
+  .scroll-indicator.hidden{
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+    pointer-events: none;
+  }
+  @keyframes indicatorFadeIn{
+    from{ opacity:0; }
+    to{ opacity:1; }
+  }
+  @keyframes scrollBounce{
+    0%, 100%{ transform: translateX(-50%) translateY(0); }
+    50%{ transform: translateX(-50%) translateY(8px); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .scroll-indicator{ animation: none; opacity:1; }
   }
   .hero-logo{
     width: 62px; height:62px;
@@ -287,7 +325,7 @@
     border: 1px solid var(--line);
     border-radius: var(--radius);
     overflow:hidden;
-    display:flex; flex-direction:column;
+    cursor: pointer;
     transition: border-color .25s ease, transform .25s ease;
   }
   .project-card:hover{ border-color: rgba(232,52,42,0.5); transform: translateY(-3px); }
@@ -296,45 +334,92 @@
     overflow:hidden;
     position:relative;
   }
-  .project-cover img{ width:100%; height:100%; object-fit: cover; }
-  .project-cover::after{
-    content:"";
+  .project-cover img{ width:100%; height:100%; object-fit: cover; display:block; image-rendering:-webkit-optimize-contrast; }
+
+  .project-hover{
     position:absolute; inset:0;
-    background: linear-gradient(180deg, transparent 40%, rgba(6,6,10,0.85) 100%);
+    background: linear-gradient(180deg, rgba(6,6,10,0.15) 0%, rgba(6,6,10,0.94) 60%);
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding: 26px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .3s ease, transform .3s ease;
   }
-  .project-body{ padding: 24px 26px 28px; }
+  .project-card:hover .project-hover,
+  .project-card:focus-visible .project-hover{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .project-hover h3{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.25rem; font-weight:600; color:#fff; margin-bottom:10px;
+  }
+  .project-hover p{
+    color: #D8D8E2; font-size:.9rem; line-height:1.55; margin: 0 0 14px;
+  }
   .project-meta{
     display:flex; gap:8px; align-items:center; flex-wrap:wrap;
-    font-size:.78rem; color: var(--muted); font-weight:500; margin-bottom:12px;
+    font-size:.78rem; color: var(--muted); font-weight:500;
   }
   .project-meta .badge{
-    padding:4px 11px; border-radius:999px; background: rgba(255,255,255,0.04); border:1px solid var(--line-soft);
+    padding:4px 11px; border-radius:999px; background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); color:#fff;
   }
-  .project-body h3{ font-family: 'Plus Jakarta Sans', sans-serif; font-size:1.3rem; font-weight:600; margin-bottom:10px; }
-  .project-body p.desc{
-    color: var(--muted); line-height:1.6; font-size:.92rem; margin:0 0 20px;
-  }
-  .project-toggle{
-    display:inline-flex; align-items:center; gap:8px;
-    background:none; border:1px solid var(--line); color: var(--ink);
-    font-family:'Inter'; font-size:.85rem; font-weight:600;
-    padding: 10px 18px; border-radius:999px; cursor:pointer;
-    transition: border-color .2s ease, box-shadow .2s ease;
-  }
-  .project-toggle:hover{
-    border-color: rgba(232,52,42,0.65);
-    box-shadow: 0 0 0 4px var(--violet-soft);
-  }
-  .project-toggle svg{ transition: transform .25s ease; }
-  .project-toggle[aria-expanded="true"] svg{ transform: rotate(180deg); }
 
-  .project-full{
-    max-height:0; overflow:hidden;
-    transition: max-height .4s ease;
-    border-top: 1px solid var(--line-soft);
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{
+    position: fixed; inset: 0;
+    background: var(--bg);
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease;
+    overflow-y: auto;
   }
-  .project-full.open{ max-height: 20000px; }
-  .project-full img{ width:100%; display:block; }
+  .lightbox.open{ opacity: 1; visibility: visible; }
+  .lightbox-back{
+    position: sticky; top: 20px; left: 24px;
+    margin: 20px 0 0 24px;
+    display:inline-flex; align-items:center; gap:8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.16);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size:.88rem; font-weight:600;
+    padding: 10px 18px 10px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    z-index: 101;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .lightbox-back:hover{ border-color: rgba(232,52,42,0.65); transform: translateX(-2px); }
+  .lightbox-scroll{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+  .lightbox-title{
+    padding-top: 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.5rem, 3.6vw, 2.2rem);
+    font-weight: 600;
+  }
+  .lightbox-cover{
+    border-radius: 16px;
+    overflow:hidden;
+    margin-top: 20px;
+  }
+  .lightbox-cover img{ width:100%; display:block; }
+  .lightbox-info{ padding: 28px 0 8px; }
+  .lightbox-info .project-meta{ margin-bottom:16px; }
+  .lightbox-info p{ color: var(--muted); font-size:1rem; line-height:1.7; }
+  .lightbox-case{
+    width:100%; display:block;
+    border-radius: 16px;
+    margin-top: 28px;
+  }
+  body.lightbox-locked{ overflow: hidden; }
 
   /* ---------- CONTACT / FOOTER ---------- */
   footer{
@@ -393,6 +478,9 @@
     <span class="eyebrow reveal" style="animation-delay:.65s;">Bem-vindo(a) ao meu portfólio</span>
     <h1><span class="word-reveal">Wilton</span> <span class="word-reveal">Araujo</span></h1>
     <div class="role"><span class="word-reveal">Projetando</span> <span class="word-reveal">experiências,</span> <span class="word-reveal">não</span> <span class="word-reveal">apenas</span> <span class="word-reveal">interfaces.</span></div>
+    <a href="#sobre" class="scroll-indicator" id="scrollIndicator" aria-label="Rolar para baixo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </a>
   </section>
 
   <!-- SOBRE -->
@@ -443,6 +531,11 @@
         <span class="tag">Photoshop / Illustrator</span>
         <span class="tag">Miro / FigJam</span>
         <span class="tag">IA aplicada ao design</span>
+        <span class="tag">Design Thinking</span>
+        <span class="tag">UX Research</span>
+        <span class="tag">No-Code</span>
+        <span class="tag">Agile</span>
+        <span class="tag">Scrum</span>
       </div>
     </div>
   </section>
@@ -457,55 +550,61 @@
 
     <div class="project-grid" data-reveal>
       <!-- Projeto 1: Instituto Brotar -->
-      <article class="project-card">
+      <article class="project-card" data-project="brotar" tabindex="0" role="button" aria-label="Abrir estudo de caso: Instituto Brotar">
         <div class="project-cover">
           <img src="assets/brotar-cover.png" alt="Capa do projeto Instituto Brotar, redesign de site institucional para ONG" loading="lazy">
-        </div>
-        <div class="project-body">
-          <div class="project-meta">
-            <span class="badge">2025</span>
-            <span class="badge">ONG</span>
-            <span class="badge">Site institucional</span>
+          <div class="project-hover">
+            <h3>Instituto Brotar — Redesign institucional</h3>
+            <p>Redesign do site do Instituto Brotar, organização que há 16 anos apoia comunidades rurais. Navegação mais clara e comunicação de marca mais coesa.</p>
+            <div class="project-meta">
+              <span class="badge">2025</span>
+              <span class="badge">ONG</span>
+              <span class="badge">Site institucional</span>
+            </div>
           </div>
-          <h3>Instituto Brotar — Redesign institucional</h3>
-          <p class="desc">Redesign do site do Instituto Brotar, organização que há 16 anos apoia comunidades rurais. Navegação mais clara e comunicação de marca mais coesa, fortalecendo a confiança de parceiros e apoiadores.</p>
-          <button class="project-toggle" aria-expanded="false" data-target="brotar-full">
-            Ver estudo de caso completo
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-        </div>
-        <div class="project-full" id="brotar-full">
-          <img src="assets/brotar-case.png" alt="Estudo de caso completo do projeto Instituto Brotar">
         </div>
       </article>
 
       <!-- Projeto 2: Delifest -->
-      <article class="project-card">
+      <article class="project-card" data-project="delifest" tabindex="0" role="button" aria-label="Abrir estudo de caso: Delifest">
         <div class="project-cover">
           <img src="assets/delifest-cover.png" alt="Capa do projeto Delifest, aplicativo mobile de delivery de comida" loading="lazy">
-        </div>
-        <div class="project-body">
-          <div class="project-meta">
-            <span class="badge">2025</span>
-            <span class="badge">App Mobile</span>
-            <span class="badge">Food Delivery</span>
+          <div class="project-hover">
+            <h3>Delifest — App de delivery de comida</h3>
+            <p>App mobile pensado para conectar moradores de cidades pequenas a restaurantes locais, com pedidos rastreáveis em tempo real.</p>
+            <div class="project-meta">
+              <span class="badge">2025</span>
+              <span class="badge">App Mobile</span>
+              <span class="badge">Food Delivery</span>
+            </div>
           </div>
-          <h3>Delifest — App de delivery de comida</h3>
-          <p class="desc">App mobile pensado para conectar moradores de cidades pequenas a restaurantes locais, com pedidos rastreáveis em tempo real e uma experiência simples do início ao fim.</p>
-          <button class="project-toggle" aria-expanded="false" data-target="delifest-full">
-            Ver estudo de caso completo
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
-          </button>
-        </div>
-        <div class="project-full" id="delifest-full">
-          <img src="assets/delifest-case.png" alt="Estudo de caso completo do projeto Delifest">
         </div>
       </article>
     </div>
   </section>
 </main>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Estudo de caso completo">
+  <button class="lightbox-back" id="lightboxBack" aria-label="Voltar">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    Voltar
+  </button>
+  <div class="lightbox-scroll">
+    <h3 class="lightbox-title" id="lightboxTitle"></h3>
+    <div class="lightbox-cover">
+      <img id="lightboxCover" src="" alt="">
+    </div>
+    <div class="lightbox-info">
+      <div class="project-meta" id="lightboxMeta"></div>
+      <p id="lightboxDesc"></p>
+    </div>
+    <img id="lightboxCase" class="lightbox-case" src="" alt="">
+  </div>
+</div>
+
 <footer id="contato" data-reveal>
+
   <div class="wrap">
     <span class="kicker">Vamos conversar</span>
     <h2>Aberto a novos projetos e oportunidades como UX/UI Designer.</h2>
@@ -522,6 +621,17 @@
 </footer>
 
 <script>
+  var scrollIndicator = document.getElementById('scrollIndicator');
+  if (scrollIndicator) {
+    window.addEventListener('scroll', function(){
+      if (window.scrollY > 60) {
+        scrollIndicator.classList.add('hidden');
+      } else {
+        scrollIndicator.classList.remove('hidden');
+      }
+    }, { passive: true });
+  }
+
   if ('IntersectionObserver' in window) {
     var revealObserver = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
@@ -537,13 +647,64 @@
     document.querySelectorAll('[data-reveal]').forEach(function(el){ el.classList.add('in-view'); });
   }
 
-  document.querySelectorAll('.project-toggle').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var target = document.getElementById(btn.dataset.target);
-      var isOpen = target.classList.toggle('open');
-      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      btn.firstChild.textContent = isOpen ? 'Ocultar estudo de caso ' : 'Ver estudo de caso completo ';
+  var projectData = {
+    brotar: {
+      cover: 'assets/brotar-cover.png',
+      title: 'Instituto Brotar — Redesign institucional',
+      desc: 'Redesign do site do Instituto Brotar, organização que há 16 anos apoia comunidades rurais. O objetivo foi criar uma navegação mais clara e uma comunicação de marca mais coesa, fortalecendo a confiança de parceiros e apoiadores.',
+      badges: ['2025', 'ONG', 'Site institucional'],
+      case: 'assets/brotar-case.png'
+    },
+    delifest: {
+      cover: 'assets/delifest-cover.png',
+      title: 'Delifest — App de delivery de comida',
+      desc: 'App mobile pensado para conectar moradores de cidades pequenas a restaurantes locais, com pedidos rastreáveis em tempo real e uma experiência de pedido simples do início ao fim.',
+      badges: ['2025', 'App Mobile', 'Food Delivery'],
+      case: 'assets/delifest-case.png'
+    }
+  };
+
+  var lightbox = document.getElementById('lightbox');
+  var lightboxBack = document.getElementById('lightboxBack');
+  var lightboxCover = document.getElementById('lightboxCover');
+  var lightboxTitle = document.getElementById('lightboxTitle');
+  var lightboxMeta = document.getElementById('lightboxMeta');
+  var lightboxDesc = document.getElementById('lightboxDesc');
+  var lightboxCase = document.getElementById('lightboxCase');
+
+  function openLightbox(key){
+    var data = projectData[key];
+    if (!data) return;
+    lightboxCover.src = data.cover;
+    lightboxCover.alt = data.title;
+    lightboxTitle.textContent = data.title;
+    lightboxDesc.textContent = data.desc;
+    lightboxMeta.innerHTML = data.badges.map(function(b){ return '<span class="badge">' + b + '</span>'; }).join('');
+    lightboxCase.src = data.case;
+    lightboxCase.alt = 'Estudo de caso completo: ' + data.title;
+    lightbox.classList.add('open');
+    lightbox.scrollTop = 0;
+    document.body.classList.add('lightbox-locked');
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    document.body.classList.remove('lightbox-locked');
+  }
+
+  document.querySelectorAll('.project-card[data-project]').forEach(function(card){
+    card.addEventListener('click', function(){
+      openLightbox(card.dataset.project);
     });
+    card.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(card.dataset.project);
+      }
+    });
+  });
+  lightboxBack.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeLightbox();
   });
 </script>
 
